@@ -1,15 +1,22 @@
 import './App.css';
-import React, { useState, useEffect } from 'react';
-
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Pokedex from './Pages/Pokedex';
+import Sidebar from './Sidebar';
 
 
 function App() {
      return (
-          <div className="App">
-            <h1>Pokedex</h1>
-            <Pokedex />
-          </div>
+          <Router>
+               <div className="App">
+                    <Sidebar />
+                    <div className="Content">
+                         <Routes>
+                              <Route path="/" element={<Pokedex />} />
+                              <Route path="/pokedex" element={<Pokedex />} />
+                         </Routes>
+                    </div>
+               </div>
+          </Router>
      );
 }
 

@@ -1,3 +1,4 @@
+import '../App.css';
 import React, { useState, useEffect } from 'react';
 
 function Pokedex() {
@@ -8,14 +9,22 @@ function Pokedex() {
 
      useEffect(() => {
           async function fetchData() {
-               const response = await fetch(currentPageUrl);
-               const data = await response.json();
-               setPokemon(data.results);
-               setNextPageUrl(data.next);
-               setPrevPageUrl(data.previous);
+              const response = await fetch(currentPageUrl);
+              const data = await response.json();
+              setNextPageUrl(data.next);
+              setPrevPageUrl(data.previous);
+      
+              const details = await Promise.all(
+                  data.results.map(async (pokemon) => {
+                      const response = await fetch(pokemon.url);
+                      return response.json();
+                  })
+              );
+      
+              setPokemon(details);
           }
           fetchData();
-     }, [currentPageUrl]);
+      }, [currentPageUrl]);
 
      function gotoNextPage() {
           setCurrentPageUrl(nextPageUrl);
@@ -26,15 +35,25 @@ function Pokedex() {
      }
 
      return (
-          <div>
-               {pokemon.map((pokemon, index) => (
-                    <div key={pokemon.name}>{pokemon.name}</div>
-               ))}
-               <div>
-                    {prevPageUrl && <button onClick={gotoPrevPage}>Previous</button>}
-                    {nextPageUrl && <button onClick={gotoNextPage}>Next</button>}
+          <div className="Container">
+               <div className="Pokedex">
+                    {pokemon.map((pokemon, index) => (
+                         <div key={pokemon.name} className="Pokemon-Card">
+                              <div className="Text">
+                                   <p># {pokemon.id}</p>
+                                   <h2>{pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}</h2>
+                              </div>
+                              <div>
+                                   {pokemon.sprites && <img src={pokemon.sprites.front_default} alt={pokemon.name} />}
+                              </div>
+                         </div> ))}
+                    <div>
+                         {prevPageUrl && <button onClick={gotoPrevPage}>Prev</button>}
+                         {nextPageUrl && <button onClick={gotoNextPage}>Next</button>}
+                    </div>
                </div>
           </div>
+
      )
 }
 

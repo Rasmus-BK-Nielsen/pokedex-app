@@ -31,6 +31,7 @@
   text-decoration: none;
 }
 
+/* CSS file for Pokedex component */
 .Container {
   width: 100%;
   display: flex;
@@ -49,10 +50,14 @@
   margin: 5px;
   padding: 10px;
   border: 1px solid black;
-  border-radius: 10px;
+  border-radius: 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  color: white;
+  width: 200px;
+  height: 100px;
+  white-space: nowrap;
 }
 
 .Pokemon-Card img {

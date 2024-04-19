@@ -68,10 +68,11 @@ function Pokedex() {
                                    {pokemon.sprites && <img src={pokemon.sprites.front_default} alt={pokemon.name} />}
                               </div>
                          </div> ))}
-                    <div>
+
+               </div>
+               <div>
                          {prevPageUrl && <button onClick={gotoPrevPage}>Prev</button>}
                          {nextPageUrl && <button onClick={gotoNextPage}>Next</button>}
-                    </div>
                </div>
           </div>
 

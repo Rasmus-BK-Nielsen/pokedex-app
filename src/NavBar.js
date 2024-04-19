@@ -7,7 +7,7 @@ function NavBar() {
     return (
         <Router>
             <div className="Navbar">
-                <Link to="/pokedex">Pokedex</Link>
+                <Link to="/pokedex" className="Link">Pokedex</Link>
             </div>
             <div className="Content">
                 <Routes>

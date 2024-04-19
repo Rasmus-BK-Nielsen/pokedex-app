@@ -1,19 +1,13 @@
+/* CSS file for the App component */
 .App {
   display: flex;
   text-align: center;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
 }
 
-.Sidebar {
-  width: 200px;
-  text-align: center;
-  background-color: white;
-  border-color: black;
-  border: 1px solid black;
-  height: 50vh;
-}
 
+/* CSS file for NavBar component*/
 .Content {
   flex-grow: 1;
   display: flex;
@@ -21,36 +15,22 @@
   align-items: center;
 }
 
-.Container {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-}
-
-.Pokedex {
-  width: 90%;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-}
-
-.Pokemon-Card {
-  flex: 1 0 18%;
-  margin: 5px;
-  padding: 10px;
-  border: 1px solid black;
-  border-radius: 10px;
+.Navbar {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-}
-
-.Pokemon-Card img {
   width: 100%;
+  background-color: red;
+  color: white;
+  border-bottom: 20px solid black;
+  font-size: 24px;
+  margin-bottom: 10px;
 }
 
-.Pokemon-Card div.Text {
-  width: 50%;
-  text-align: left;
-  display: block;
+.Link {
+  padding: 100px;
+}
+
+.Navbar a {
+  color: white;
+  text-decoration: none;
 }

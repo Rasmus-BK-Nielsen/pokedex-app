@@ -24,48 +24,10 @@
   color: white;
   border-bottom: 10px solid black;
   font-size: 24px;
+  margin-bottom: 10px;
 }
 
 .Navbar a {
   color: white;
   text-decoration: none;
-}
-
-/* CSS file for Pokedex component */
-.Container {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-}
-
-.Pokedex {
-  width: 90%;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-}
-
-.Pokemon-Card {
-  flex: 1 0 18%;
-  margin: 5px;
-  padding: 10px;
-  border: 1px solid black;
-  border-radius: 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  color: white;
-  width: 200px;
-  height: 100px;
-  white-space: nowrap;
-}
-
-.Pokemon-Card img {
-  width: 100%;
-}
-
-.Pokemon-Card div.Text {
-  width: 50%;
-  text-align: left;
-  display: block;
 }

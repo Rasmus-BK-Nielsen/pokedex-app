@@ -1,4 +1,4 @@
-import '../App.css';
+import './Pokedex.css';
 import React, { useState, useEffect } from 'react';
 
 const typeColors = {

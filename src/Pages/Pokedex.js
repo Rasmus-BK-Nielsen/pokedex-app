@@ -1,5 +1,5 @@
 import './Pokedex.css';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 const typeColors = {
      bug: '#A8B820',
@@ -32,6 +32,9 @@ export default function Pokedex() {
      const [totalPages, setTotalPages] = useState(0);
      const [currentPage, setCurrentPage] = useState(1);
 
+     const [showOverlay, setShowOverlay] = useState(false);
+     const [selectedPokemon, setSelectedPokemon] = useState(null);
+
      useEffect(() => {
           async function fetchData() {
               const response = await fetch(currentPageUrl);
@@ -55,13 +58,17 @@ export default function Pokedex() {
       }, [currentPageUrl]);
 
      function gotoNextPage() {
-          setCurrentPageUrl(nextPageUrl);
-          setCurrentPage(prev => prev + 1);
+          if (currentPage < totalPages) {
+               setCurrentPageUrl(nextPageUrl);
+               setCurrentPage(prev => prev + 1);
+          }
      }
 
      function gotoPrevPage() {
-          setCurrentPageUrl(prevPageUrl);
-          setCurrentPage(prev => prev - 1);
+          if (currentPage > 1) {
+               setCurrentPageUrl(prevPageUrl);
+               setCurrentPage(prev => prev - 1);
+          }
      }
 
      function goToPage(pageNr) {
@@ -69,11 +76,63 @@ export default function Pokedex() {
           setCurrentPage(pageNr);
      }
 
+     function PokemonDetails({ pokemon, onClose }) {
+          const overlayRef = useRef(null);
+
+          useEffect(() => {
+              function handleClickOutside(event) {
+                  if (overlayRef.current && !overlayRef.current.contains(event.target)) {
+                      onClose();
+                  }
+              }
+
+              document.addEventListener('mousedown', handleClickOutside);
+              return () => {document.removeEventListener('mousedown', handleClickOutside)};
+
+          }, [onClose]);
+
+          if (!pokemon) return null;
+      
+          return (
+              <div className="Overlay">
+                  <div className="Overlay-inner" ref={overlayRef}>
+                      <h1>{pokemon.name.toUpperCase()}</h1>
+                      <img src={pokemon.sprites.front_default} alt={pokemon.name} />
+                      <p>Height: {pokemon.height}</p>
+                      <p>Weight: {pokemon.weight}</p>
+                      <div>
+                          {pokemon.stats.map(stat => (
+                              <p key={stat.stat.name}>{stat.stat.name}: {stat.base_stat}</p>
+                          ))}
+                      </div>
+                      <div>
+                          <h4>Types:</h4>
+                          {pokemon.types.map(type => (
+                              <span key={type.type.name}>{type.type.name} </span>
+                          ))}
+                      </div>
+                  </div>
+              </div>
+          );
+      }
+      
      return (
           <div className="Container">
+               {showOverlay && <PokemonDetails pokemon={selectedPokemon} onClose={() => setShowOverlay(false)} />}
                <div className="Pokedex">
-                    {pokemon.map((pokemon, index) => (
-                         <div key={pokemon.name} className="Pokemon-Card" style={{backgroundColor: typeColors[pokemon.types[0].type.name]}}>
+                    {pokemon.map((pokemon, index) => {
+                         const type1 = pokemon.types[0].type.name;
+                         const type2 = pokemon.types.length > 1 ? pokemon.types[1].type.name : type1;
+
+                         return (
+                         <div 
+                           key={pokemon.name} 
+                           className="Pokemon-Card" 
+                           style={{background: `linear-gradient(to right, ${typeColors[type1]}, ${typeColors[type2]})`}}
+                           onClick={() => {
+                              setSelectedPokemon(pokemon);
+                              setShowOverlay(true);
+                           }}>
                               <div className="Text">
                                    <p># {pokemon.id}</p>
                                    <h2>{pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}</h2>
@@ -81,22 +140,32 @@ export default function Pokedex() {
                               <div>
                                    {pokemon.sprites && <img src={pokemon.sprites.front_default} alt={pokemon.name} />}
                               </div>
-                         </div> ))}
+                         </div> );
+                    })}
 
                </div>
                <div className="Pagination">
-                    <button onClick={gotoPrevPage}>Prev</button>
-                    {[...Array(totalPages).keys()].map((_,index) => (
+                    <button 
+                         onClick={gotoPrevPage}
+                         className={`button button-arrow ${currentPage === 1 ? 'button-current' : ''}`}
+                         > &larr;
+                    </button>
+                    {currentPage > 3 && <span> . . . </span>}
+                    {[...Array(totalPages).keys()].filter(page => Math.abs(currentPage - (page + 1)) <= 2).map(page => (
                          <button 
-                           key={index} 
-                           onClick={() => goToPage(index + 1)}
-                           style={{backgroundColor: currentPage === index + 1 ? 'lightgray' : 'white'}}
-                           >{index + 1}
+                              key={page} 
+                              onClick={() => goToPage(page + 1)}
+                              className={`button ${currentPage === page + 1 ? 'button-current' : ''}`}
+                           >{page + 1}
                          </button>
                     ))}
-                    <button onClick={gotoNextPage}>Next</button>
+                    {currentPage < totalPages - 2 && <span> . . . </span>}
+                    <button 
+                         onClick={gotoNextPage}
+                         className={`button button-arrow ${currentPage === totalPages ? 'button-current' : ''}`}
+                         > &rarr;
+                    </button>
                </div>
           </div>
-
      )
 }

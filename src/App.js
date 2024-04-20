@@ -1,12 +1,20 @@
+import React from "react";
+import { HashRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import Pokedex from './Pages/Pokedex';
 import './App.css';
-import NavBar from './NavBar';
 
-function App() {
+export default function App() {
      return (
-          <div className="App">
-               <NavBar />
-          </div>
+          <Router>
+               <div className="Navbar">
+                    <Link to="/pokedex" className="Link">Pokedex</Link>
+               </div>
+               <div className="Content">
+                    <Routes>
+                         <Route path="/" element={<Pokedex />} />
+                         <Route path="/pokedex" element={<Pokedex />} />
+                    </Routes>
+               </div>
+          </Router>
      );
 }
-
-export default App;

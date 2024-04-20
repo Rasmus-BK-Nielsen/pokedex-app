@@ -22,18 +22,25 @@ const typeColors = {
      water: '#6890F0'
 };
 
-function Pokedex() {
+export default function Pokedex() {
      const [pokemon, setPokemon] = useState([]);
      const [currentPageUrl, setCurrentPageUrl] = useState('https://pokeapi.co/api/v2/pokemon');
+
      const [nextPageUrl, setNextPageUrl] = useState();
      const [prevPageUrl, setPrevPageUrl] = useState();
+
+     const [totalPages, setTotalPages] = useState(0);
+     const [currentPage, setCurrentPage] = useState(1);
 
      useEffect(() => {
           async function fetchData() {
               const response = await fetch(currentPageUrl);
               const data = await response.json();
+              const perPage = 20;
+
               setNextPageUrl(data.next);
               setPrevPageUrl(data.previous);
+              setTotalPages(Math.ceil(data.count / perPage));
       
               const details = await Promise.all(
                   data.results.map(async (pokemon) => {
@@ -49,10 +56,17 @@ function Pokedex() {
 
      function gotoNextPage() {
           setCurrentPageUrl(nextPageUrl);
+          setCurrentPage(prev => prev + 1);
      }
 
      function gotoPrevPage() {
           setCurrentPageUrl(prevPageUrl);
+          setCurrentPage(prev => prev - 1);
+     }
+
+     function goToPage(pageNr) {
+          setCurrentPageUrl(`https://pokeapi.co/api/v2/pokemon?offset=${(pageNr - 1) * 20}&limit=20`);
+          setCurrentPage(pageNr);
      }
 
      return (
@@ -70,13 +84,19 @@ function Pokedex() {
                          </div> ))}
 
                </div>
-               <div>
-                         {prevPageUrl && <button onClick={gotoPrevPage}>Prev</button>}
-                         {nextPageUrl && <button onClick={gotoNextPage}>Next</button>}
+               <div className="Pagination">
+                    <button onClick={gotoPrevPage}>Prev</button>
+                    {[...Array(totalPages).keys()].map((_,index) => (
+                         <button 
+                           key={index} 
+                           onClick={() => goToPage(index + 1)}
+                           style={{backgroundColor: currentPage === index + 1 ? 'lightgray' : 'white'}}
+                           >{index + 1}
+                         </button>
+                    ))}
+                    <button onClick={gotoNextPage}>Next</button>
                </div>
           </div>
 
      )
 }
-
-export default Pokedex;

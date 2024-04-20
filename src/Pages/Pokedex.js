@@ -76,8 +76,15 @@ export default function Pokedex() {
      return (
           <div className="Container">
                <div className="Pokedex">
-                    {pokemon.map((pokemon, index) => (
-                         <div key={pokemon.name} className="Pokemon-Card" style={{backgroundColor: typeColors[pokemon.types[0].type.name]}}>
+                    {pokemon.map((pokemon, index) => {
+                         const type1 = pokemon.types[0].type.name;
+                         const type2 = pokemon.types.length > 1 ? pokemon.types[1].type.name : type1;
+
+                         return (
+                         <div 
+                           key={pokemon.name} 
+                           className="Pokemon-Card" 
+                           style={{background: `linear-gradient(to right, ${typeColors[type1]}, ${typeColors[type2]})`}}>
                               <div className="Text">
                                    <p># {pokemon.id}</p>
                                    <h2>{pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}</h2>
@@ -85,7 +92,8 @@ export default function Pokedex() {
                               <div>
                                    {pokemon.sprites && <img src={pokemon.sprites.front_default} alt={pokemon.name} />}
                               </div>
-                         </div> ))}
+                         </div> );
+                    })}
 
                </div>
                <div className="Pagination">

@@ -17,7 +17,7 @@
 
 .Navbar {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   width: 100%;
   background-color: red;
   color: white;
@@ -27,7 +27,10 @@
 }
 
 .Link {
-  padding: 100px;
+  padding-bottom: 100px;
+  padding-top: 100px;
+  padding-right: 20px;
+  padding-left: 50px;
 }
 
 .Navbar a {

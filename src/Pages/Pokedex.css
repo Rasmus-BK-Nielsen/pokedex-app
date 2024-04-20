@@ -38,3 +38,33 @@
      text-align: left;
      display: block;
    }
+
+   .Pagination {
+     display: flex;
+     justify-content: center;
+     align-items: center;
+   }
+
+   .Pagination .button {
+     background: linear-gradient(to bottom, red 48%, black 2%, white 50%);
+     color: black;
+     font-size: 15px;
+     font-weight: bold;
+     border: 1px solid black;
+     border-radius: 50%;
+     cursor: pointer;
+     width: 30px;
+     height: 30px;
+     text-align: center;
+     line-height: 30px;
+   }
+   
+   .Pagination .button-current {
+     border: 2px solid blue;
+     color: blue;
+   }
+
+   .button-arrow {
+     font-size: 20px !important;
+     font-weight: bold !important;
+   }

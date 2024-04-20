@@ -55,13 +55,17 @@ export default function Pokedex() {
       }, [currentPageUrl]);
 
      function gotoNextPage() {
-          setCurrentPageUrl(nextPageUrl);
-          setCurrentPage(prev => prev + 1);
+          if (currentPage < totalPages) {
+               setCurrentPageUrl(nextPageUrl);
+               setCurrentPage(prev => prev + 1);
+          }
      }
 
      function gotoPrevPage() {
-          setCurrentPageUrl(prevPageUrl);
-          setCurrentPage(prev => prev - 1);
+          if (currentPage > 1) {
+               setCurrentPageUrl(prevPageUrl);
+               setCurrentPage(prev => prev - 1);
+          }
      }
 
      function goToPage(pageNr) {
@@ -85,16 +89,26 @@ export default function Pokedex() {
 
                </div>
                <div className="Pagination">
-                    <button onClick={gotoPrevPage}>Prev</button>
-                    {[...Array(totalPages).keys()].map((_,index) => (
+                    <button 
+                         onClick={gotoPrevPage}
+                         className={`button button-arrow ${currentPage === 1 ? 'button-current' : ''}`}
+                         > &larr;
+                    </button>
+                    {currentPage > 3 && <span> . . . </span>}
+                    {[...Array(totalPages).keys()].filter(page => Math.abs(currentPage - (page + 1)) <= 2).map(page => (
                          <button 
-                           key={index} 
-                           onClick={() => goToPage(index + 1)}
-                           style={{backgroundColor: currentPage === index + 1 ? 'lightgray' : 'white'}}
-                           >{index + 1}
+                              key={page} 
+                              onClick={() => goToPage(page + 1)}
+                              className={`button ${currentPage === page + 1 ? 'button-current' : ''}`}
+                           >{page + 1}
                          </button>
                     ))}
-                    <button onClick={gotoNextPage}>Next</button>
+                    {currentPage < totalPages - 2 && <span> . . . </span>}
+                    <button 
+                         onClick={gotoNextPage}
+                         className={`button button-arrow ${currentPage === totalPages ? 'button-current' : ''}`}
+                         > &rarr;
+                    </button>
                </div>
           </div>
 
